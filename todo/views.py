@@ -1,40 +1,38 @@
-from rest_framework import status
-from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-from user.serializers import UserRegistrationSerializer
-from .models import UserProfile
+from rest_framework.decorators import api_view
 
+from .models import Todo
+from .serializers import TodoSerializer
 
-class UserProfileView(RetrieveAPIView):
+@api_view(['GET'])
+def todoList(request):
+    todo = Todo.objects.all()
+    serializers = TodoSerializer(todo , many = True )
+    return Response(serializers.data)
 
-    permission_classes = (IsAuthenticated,)
-    authentication_class = JSONWebTokenAuthentication
+@api_view(['GET'])
+def todoDetail(request, pk):
+    todo = Todo.objects.get(id=pk)
+    serializer = TodoSerializer(todo,many = False)
+    return  Response(serializer.data) 
 
-    def get(self, request):
-        try:
-            user_profile = UserProfile.objects.get(user=request.user)
-            status_code = status.HTTP_200_OK
-            response = {
-                'success': 'true',
-                'status code': status_code,
-                'message': 'User profile fetched successfully',
-                'data': [{
-                    'first_name': user_profile.first_name,
-                    'last_name': user_profile.last_name,
-                    'phone_number': user_profile.phone_number,
-                    'age': user_profile.age,
-                    'gender': user_profile.gender,
-                    }]
-                }
+@api_view(['POST'])
+def todoCreate(request):
+    serializer = TodoSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
 
-        except Exception as e:
-            status_code = status.HTTP_400_BAD_REQUEST
-            response = {
-                'success': 'false',
-                'status code': status.HTTP_400_BAD_REQUEST,
-                'message': 'User does not exists',
-                'error': str(e)
-                }
-        return Response(response, status=status_code)
+@api_view(['PUT'])
+def todoUpdate(request, pk):
+    todo = Todo.objects.get(id = pk)
+    serializer  = TodoSerializer(instance=todo, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+@api_view(['DELETE'])
+def todoDelete(request, pk):
+    todo = Todo.objects.get(id = pk)
+    todo.delete()
+    return Response('Deleted')          

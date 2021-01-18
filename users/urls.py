@@ -1,7 +1,6 @@
 from django.conf.urls import url
-from .views import UserRegistrationView, UserLoginView
+from . import views
 
 urlpatterns = [
-    url(r'^signup/', UserRegistrationView.as_view(), name = 'Sign Up'),
-    url(r'^signin/', UserLoginView.as_view(), name = 'Sign In'),
+    url(r'^user/list/', views.userList, name='Users list'),
 ]

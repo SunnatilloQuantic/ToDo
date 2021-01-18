@@ -17,15 +17,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # JWT authentication backend library
-    'rest_framework_simplejwt',
-    'djoser',
-    # drf 
+    # drf
     'rest_framework',
     # local auth app
     'users.apps.UsersConfig',
     # local todo app
-    # 'todo.apps.TodoConfig',
+    'todo.apps.TodoConfig',
 ]
 
 MIDDLEWARE = [
@@ -95,10 +92,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+CORS_ALLOW_CREDENTIALS = True # to accept cookies via ajax request
+
+AUTH_USER_MODEL = 'users.Users'
+
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated', # make all endpoints private
+    )
 }
 
 # Jwt Authentication
