@@ -1,9 +1,8 @@
 from pathlib import Path
-from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = '&sk3c@ph_qfc%mqmsfepv*&pkgpw_&^wm_16vlf7^(x87e%=$g'
+SECRET_KEY = 'hh_#sbf*(zimzd%5xx9f8e+@i0tfqclb80u^=t4emayam6bo1o'
 
 DEBUG = True
 
@@ -16,14 +15,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # drf
+    # drf 
     'rest_framework',
-    'rest_framework.authtoken',
-
-    # local auth todos
-    'user.apps.UserConfig',
-    # local todos todos
-    'todos.apps.TodoConfig',
+    # local app
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -56,12 +51,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'main.wsgi.application'
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -89,47 +86,3 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',  # <-- And here
-    ],
-}
-
-# Jwt Authentication
-# https://github.com/jpadilla/django-rest-framework-jwt/blob/master/rest_framework_jwt/settings.py
-JWT_AUTH = {
-    'JWT_ENCODE_HANDLER':
-        'rest_framework_jwt.utils.jwt_encode_handler',
-
-    'JWT_DECODE_HANDLER':
-        'rest_framework_jwt.utils.jwt_decode_handler',
-
-    'JWT_PAYLOAD_HANDLER':
-        'rest_framework_jwt.utils.jwt_payload_handler',
-
-    'JWT_PAYLOAD_GET_USER_ID_HANDLER':
-        'rest_framework_jwt.utils.jwt_get_user_id_from_payload_handler',
-
-    'JWT_RESPONSE_PAYLOAD_HANDLER':
-        'rest_framework_jwt.utils.jwt_response_payload_handler',
-
-    'JWT_SECRET_KEY': 'SECRET_KEY',
-    'JWT_GET_USER_SECRET_KEY': None,
-    'JWT_PUBLIC_KEY': None,
-    'JWT_PRIVATE_KEY': None,
-    'JWT_ALGORITHM': 'HS256',
-    'JWT_VERIFY': True,
-    'JWT_VERIFY_EXPIRATION': True,
-    'JWT_LEEWAY': 0,
-    'JWT_EXPIRATION_DELTA': timedelta(days=30),
-    'JWT_AUDIENCE': None,
-    'JWT_ISSUER': None,
-
-    'JWT_ALLOW_REFRESH': False,
-    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=30),
-
-    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
-    'JWT_AUTH_COOKIE': None,
-}
